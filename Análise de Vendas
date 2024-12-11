@@ -1,0 +1,53 @@
+def tit(msg):
+    print('-'*30)
+    print(msg.center(30))
+    print('-'*30)
+
+vendas = []
+
+def vendadia():
+    tit('ANALISE DAS VENDAS')
+    while len(vendas) < 5:
+        try:
+            print(f'DIA {len(vendas) + 1}')
+            quant = int(input('Quantidade vendida: '))
+            valor = float(input('Valor unitário: R$ '))
+            if quant < 0 or valor < 0:
+                print('\033[031mERRO: Digite valores válidos.\033[m')
+                continue
+            print('\033[32mVendas do dia registradas com sucesso!\033[m')
+            diario = {'Dia': f'Dia {len(vendas) + 1}', 'Quantidade': quant, 'Valor unitário': valor}
+            vendas.append(diario)
+        except ValueError:
+            print('\033[031mERRO: Digite valores válidos.\033[m')
+    return vendas
+
+def vendastot(vendas):
+    total = sum(venda['Quantidade'] * venda['Valor unitário'] for venda in vendas)
+    return total
+
+def melhordia(vendas):
+    melhor = max(vendas, key=lambda venda: venda['Quantidade'])
+
+    valor_vendido_melhor_dia = melhor['Quantidade'] * melhor['Valor unitário']
+    return melhor, valor_vendido_melhor_dia
+
+def mediadia(vendas):
+    totquan = sum(venda['Quantidade'] for venda in vendas)
+    media = totquan / len(vendas)
+    return media
+
+def relatoriogeral(vendas):
+    total = vendastot(vendas)
+    media = mediadia(vendas)
+    melhor, valor_vendido_melhor_dia = melhordia(vendas)
+
+    tit('RELATÓRIO DE VENDAS')
+    print(f'O total de vendas essa semana foi R${total:.2f}')
+    print(f'O melhor dia de vendas foi {melhor["Dia"]} com {melhor["Quantidade"]} unidades vendidas.')
+    print(f'No melhor dia, o valor total vendido foi R${valor_vendido_melhor_dia:.2f}')
+    print(f'A média diária foi de {media:.2f} unidades.')
+
+
+dados = vendadia()
+relatoriogeral(dados)
